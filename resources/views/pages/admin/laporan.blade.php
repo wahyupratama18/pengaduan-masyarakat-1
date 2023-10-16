@@ -31,7 +31,7 @@ Laporan
               <th class="px-4 py-3">No</th>
               <th class="px-4 py-3">NIK</th>
               <th class="px-4 py-3">Nama</th>
-              <th class="px-4 py-3">Pengaduan</th>
+              <th class="px-4 py-3">Konsultasi</th>
               <th class="px-4 py-3">Tanggal</th>
               <th class="px-4 py-3">Status</th>
             </tr>

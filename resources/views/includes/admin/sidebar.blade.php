@@ -1,10 +1,10 @@
 <!-- Desktop sidebar -->
 <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
   <div class="py-4 text-gray-500 dark:text-gray-400">
-    <img src="{{ asset('img/logo.svg')}}" alt=""
-      class="inline-flex ml-3 items-center transform transition hover:scale-125 duration-300 ease-in-out" />
-    <a class="ml-3 text-lg font-bold text-gray-800 dark:text-gray-200" href="/">
-      APLIKASIKU
+    <img src="{{ asset('img/ukpbj.png')}}" alt=""
+      class="inline-flex ml-3 items-center transform transition hover:scale-125 duration-300 ease-in-out" style="width: 40px"/>
+    <a class="ml-3 text-lg font-bold text-gray-800 dark:text-gray-200">
+      UKPBJ
     </a>
     <ul class="mt-6">
       <li class="relative px-6 py-3">
@@ -33,7 +33,7 @@
               d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z"
               clip-rule="evenodd" />
           </svg>
-          <span class="ml-4">Pengaduan</span>
+          <span class="ml-4">Konsultasi</span>
         </a>
       </li>
     </ul>
@@ -105,7 +105,7 @@
   @keydown.escape="closeSideMenu">
   <div class="py-4 text-gray-500 dark:text-gray-400">
     <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
-      APLIKASIKU
+      UKPBJ
     </a>
     <ul class="mt-6">
       <li class="relative px-6 py-3">

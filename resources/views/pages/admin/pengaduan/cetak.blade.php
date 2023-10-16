@@ -24,7 +24,7 @@
     <hr class="solid">
 
     <div>
-      <h6>Laporan Pengaduan</h6>
+      <h6>Konsultasi</h6>
       <h6>{{ $pengaduan->created_at->format('l, d F Y') }}</h6>
     </div>
     <hr class="solid">
@@ -38,7 +38,7 @@
     <table class="table table-bordered">
       <thead class="thead">
         <tr>
-          <th scope="col">Laporan Pengaduan</th>
+          <th scope="col">Konsultasi</th>
           <th scope="col">Status</th>
         </tr>
       </thead>

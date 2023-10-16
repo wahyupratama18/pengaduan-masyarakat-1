@@ -32,6 +32,7 @@ Route::prefix('user')
 		Route::get('/', 'MasyarakatController@index')->name('masyarakat-dashboard');
         Route::resource('pengaduan', 'MasyarakatController');
         Route::get('pengaduan', 'MasyarakatController@lihat');
+        Route::put('updatepengaduan/{id}', 'MasyarakatController@update');
 });
 
 

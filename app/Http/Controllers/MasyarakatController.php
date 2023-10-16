@@ -34,7 +34,7 @@ class MasyarakatController extends Controller
      */
     public function create()
     {
-        return view('pages.masyarakat.index');
+        // return view('pages.masyarakat.detail');
     }
 
     /**
@@ -47,7 +47,7 @@ class MasyarakatController extends Controller
     {
         $request->validate([
         'description' => 'required',
-        'image' => 'required',
+        'image' => 'required|image|mimes:png,jpg,jpeg',
         ]);
 
         $nik = Auth::user()->nik;
@@ -64,7 +64,9 @@ class MasyarakatController extends Controller
 
         Alert::success('Berhasil', 'Pengaduan terkirim');
         Pengaduan::create($data);
-        return redirect('user');
+        return redirect('user/pengaduan');
+        
+        // return view('pages.masyarakat.detail', compact('items'));
     }
 
     /**
@@ -111,7 +113,17 @@ class MasyarakatController extends Controller
      */
     public function edit($id)
     {
-        //
+        $item = Pengaduan::with([
+            'details', 'user'
+            ])->findOrFail($id);
+    
+            $tangap = Tanggapan::where('pengaduan_id',$id)->first();
+    
+            return view('pages.masyarakat.edit',[
+            'item' => $item,
+            'tangap' => $tangap
+            ]);
+
     }
 
     /**
@@ -123,7 +135,70 @@ class MasyarakatController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //  $this->validate($request, [
+        //     'description' => 'required',
+        //     'image'   => 'image|mimes:jpeg,jpg,png|max:2048',
+        // ]);
+    
+        // //get data Blog by ID
+        // $pengaduan = Pengaduan::findOrFail($id);
+    
+        // if($request->file('image') == "") {
+        //     $nik = Auth::user()->nik;
+        //     $id = Auth::user()->id;
+        //     $name = Auth::user()->name;
+        
+        //     $data = $request->all();
+        //     $data['user_nik']=$nik;
+        //     $data['user_id']=$id;
+        //     $data['name']=$name;
+
+        //     $Pengaduan->update($data);
+        //     // $data->update([
+        //     //     'description'    => $request->description,
+        //     // ]);
+    
+        // } else {
+    
+        //     //hapus old image
+        //     Storage::disk('local')->delete('assets/laporan', 'public'.$image->image);
+    
+        //     //upload new image
+        //     $image = $request->file('gambar');
+        //     $image->storeAs('assets/laporan', 'public', $image->hashName());
+    
+        //     $image->update([
+        //         'description' => $request->description,
+        //         'image'  => $image->hashName(),
+        //     ]);
+    
+        // }
+        //     return redirect()->route('user.pengaduan')->with(['success' => 'Data Berhasil Diupdate!']);
+
+
+        $request->validate([
+            'description' => 'required',
+            'image' => 'required|image|mimes:png,jpg,jpeg',
+            ]);
+    
+            $pengaduan = Pengaduan::findOrFail($id);
+            $nik = Auth::user()->nik;
+            $id = Auth::user()->id;
+            $name = Auth::user()->name;
+    
+            $data = $request->all();
+            $data['user_nik']=$nik;
+            $data['user_id']=$id;
+            $data['name']=$name;
+            $data['image'] = $request->file('image')->store('assets/laporan', 'public');
+    
+    
+    
+            Alert::success('Berhasil', 'Pengaduan terkirim');
+            Pengaduan::update($data);
+            // Pengaduan::update($data);
+            // Pengaduan::where('id', $id)->update($request->validated());
+            return redirect('user/pengaduan');
     }
 
     /**

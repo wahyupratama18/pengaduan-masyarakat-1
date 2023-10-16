@@ -1,7 +1,7 @@
 @extends('layouts.masyarakat')
 
 @section('title')
-Dashboard
+Edit Konsultasi
 @endsection
 @section('content')
 <main class="h-full pb-16 overflow-y-auto">
@@ -22,25 +22,25 @@ Dashboard
       </ul>
     </div>
     @endif
-    <form action="{{ route('pengaduan.store')}} " method="POST" enctype="multipart/form-data">
+    <form action="{{ route('pengaduan.update', $item->id)}} " method="POST" enctype="multipart/form-data">
       @csrf
-
+      @method('PUT')
       <div class="px-4 py-3 mb-8 bg-red-300 rounded-lg shadow-xl border-2 dark:bg-gray-800">
         <label class="block text-sm">
           <h2 class="my-6 text-2xl font-semibold text-center text-gray-700 dark:text-gray-200">
-           Form Laporan
+           Form Edit Konsultasi
           </h2>
           <textarea
             class="block w-full mt-1 text-sm border-2 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-red-400 focus:outline-none focus:shadow-outline-red dark:focus:shadow-outline-gray"
-            rows="8" type="text" placeholder="Isi laporan Anda dan sertakan lokasi dengan jelas" value="{{ old('description')}}"
-            name="description"></textarea>
+            rows="8" type="text" placeholder="Isi laporan Anda dan sertakan lokasi dengan jelas" 
+            name="description">{{$item->description}}</textarea>
         </label>
 
         <label for="image" class="block mt-4 text-sm">
           <span class="text-gray-700 dark:text-gray-400">Foto</span>
           <input
             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-red-400 focus:outline-none focus:shadow-outline-red dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-            type="file" value="{{ old('image')}}" name="image" />
+            type="file" value="{{ old('image')}}" name="image" />{{$item->image}}
         </label>
         <button
         style="width: 100%"

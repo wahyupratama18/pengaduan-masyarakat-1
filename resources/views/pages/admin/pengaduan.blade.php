@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>APLIKASI | Pengaduan Masyarakat</title>
+  <title>UKPBJ</title>
   
   <style>
     .thead{
@@ -27,7 +27,7 @@
           <th scope="col">No</th>
           <th scope="col">NIK</th>
           <th scope="col">Nama</th>
-          <th scope="col">Pengaduan</th>
+          <th scope="col">Konsultasi</th>
           <th scope="col">Tanggal</th>
           <th scope="col">Status</th>
         </tr>
