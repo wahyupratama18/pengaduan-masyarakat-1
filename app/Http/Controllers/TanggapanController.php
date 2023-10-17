@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
-
 use App\Models\Pengaduan;
 use App\Models\Tanggapan;
-use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
-
 
 class TanggapanController extends Controller
 {
@@ -38,13 +34,12 @@ class TanggapanController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         DB::table('pengaduan')->where('id', $request->pengaduan_id)->update([
-            'status'=> $request->status,
+            'status' => $request->status,
         ]);
 
         $petugas_id = Auth::user()->id;
@@ -52,10 +47,11 @@ class TanggapanController extends Controller
         $data = $request->all();
 
         $data['pengaduan_id'] = $request->pengaduan_id;
-        $data['petugas_id']=$petugas_id;
+        $data['petugas_id'] = $petugas_id;
 
         Alert::success('Berhasil', 'Pengaduan berhasil ditanggapi');
         Tanggapan::create($data);
+
         return redirect('admin/pengaduans');
     }
 
@@ -68,11 +64,11 @@ class TanggapanController extends Controller
     public function show($id)
     {
         $item = Pengaduan::with([
-            'details', 'user'
+            'details', 'user',
         ])->findOrFail($id);
 
-        return view('pages.admin.tanggapan.add',[
-            'item' => $item
+        return view('pages.admin.tanggapan.add', [
+            'item' => $item,
         ]);
     }
 
@@ -90,7 +86,6 @@ class TanggapanController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

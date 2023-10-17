@@ -8,13 +8,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pengaduan extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'pengaduan';
 
     protected $fillable = [
-        'name', 'description', 'image', 'status', 'user_nik', 'user_id'
+        'name',
+        'description',
+        'image',
+        'status',
+        'user_nik',
+        'user_id',
     ];
 
     protected $hidden = [
@@ -48,6 +53,6 @@ class Pengaduan extends Model
 
     public function status()
     {
-        return $this->belongsTo(Tanggapan::class, 'status_id','status');
+        return $this->belongsTo(Tanggapan::class, 'status_id', 'status');
     }
 }

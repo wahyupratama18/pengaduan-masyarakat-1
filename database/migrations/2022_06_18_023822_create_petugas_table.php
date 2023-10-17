@@ -14,7 +14,7 @@ class CreatePetugasTable extends Migration
     public function up()
     {
         Schema::create('petugas', function (Blueprint $table) {
-            $table->id('id_petugas');
+            $table->id();
             $table->string('nama_petugas', 35);
             $table->string('username', 25)->unique();
             $table->string('password');
@@ -36,4 +36,4 @@ class CreatePetugasTable extends Migration
     {
         Schema::dropIfExists('petugas');
     }
-};
+}

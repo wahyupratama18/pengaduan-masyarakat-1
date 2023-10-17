@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ class CreatePengaduanTable extends Migration
 
             $table->string('user_nik');
             $table->string('name');
-            $table->integer('user_id');
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->text('description');
             $table->string('image');
             $table->string('status')->default('Belum di Proses');

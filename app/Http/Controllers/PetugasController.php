@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-
 use RealRashid\SweetAlert\Facades\Alert;
-
 
 class PetugasController extends Controller
 {
@@ -22,16 +18,17 @@ class PetugasController extends Controller
      */
     public function index()
     {
-        if( Auth::user()->roles != 'ADMIN')
-        {
+        if (Auth::user()->roles != 'ADMIN') {
 
-        Alert::warning('Peringatan', 'Maaf Anda tidak punya akses');
-        return back();
+            Alert::warning('Peringatan', 'Maaf Anda tidak punya akses');
+
+            return back();
         }
 
-        $data = DB::table('users')->where('roles','=', 'PETUGAS')->orWhere('roles', '=', 'ADMIN')->get();
-        return view('pages.admin.petugas.index',[
-            'data' => $data
+        $data = DB::table('users')->where('roles', '=', 'PETUGAS')->orWhere('roles', '=', 'ADMIN')->get();
+
+        return view('pages.admin.petugas.index', [
+            'data' => $data,
         ]);
     }
 
@@ -48,7 +45,6 @@ class PetugasController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -73,6 +69,7 @@ class PetugasController extends Controller
         ]);
 
         Alert::success('Berhasil', 'Petugas baru ditambahkan');
+
         return redirect('admin/petugas');
     }
 
@@ -101,7 +98,6 @@ class PetugasController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

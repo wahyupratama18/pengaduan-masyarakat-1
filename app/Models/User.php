@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -22,7 +22,7 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
-        'roles'
+        'roles',
     ];
 
     /**
@@ -47,5 +47,13 @@ class User extends Authenticatable
     public function pengaduan()
     {
         return $this->hasMany(Pengaduan::class, 'user_nik', 'nik');
+    }
+
+    /**
+     * Get all of the pengaduans for the User
+     */
+    public function pengaduans(): HasMany
+    {
+        return $this->hasMany(Pengaduan::class);
     }
 }

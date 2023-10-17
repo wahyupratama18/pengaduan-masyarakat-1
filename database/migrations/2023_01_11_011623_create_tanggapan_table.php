@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Pengaduan;
+use App\Models\Petugas;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,9 +17,9 @@ class CreateTanggapanTable extends Migration
     {
         Schema::create('tanggapan', function (Blueprint $table) {
             $table->id();
-            $table->integer('pengaduan_id');
+            $table->foreignIdFor(Pengaduan::class)->constrained('tanggapan')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('tanggapan', 255);
-            $table->integer('petugas_id');
+            $table->foreignIdFor(Petugas::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -21,12 +21,12 @@ class Tanggapan extends Model
 
     public function pengaduan()
     {
-    	return $this->hasOne(Pengaduan::class,'id', 'id');
+        return $this->hasOne(Pengaduan::class, 'id', 'id');
     }
 
     public function proses()
     {
-        return $this->hasMany(Pengaduan::class, 'status_id','status');
+        return $this->hasMany(Pengaduan::class, 'status_id', 'status');
     }
 
     public function country()

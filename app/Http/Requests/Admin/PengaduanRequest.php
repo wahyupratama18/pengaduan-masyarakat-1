@@ -28,7 +28,7 @@ class PengaduanRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'description' => 'required',
             'image' => 'required',
-            'status' => 'required'
+            'status' => 'required',
         ];
     }
 }

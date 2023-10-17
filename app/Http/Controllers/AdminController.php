@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-
 use App\Models\Pengaduan;
-
-// use Barryvdh\DomPDF\PDF;
 use Barryvdh\DomPDF\Facade as PDF;
-
+// use Barryvdh\DomPDF\PDF;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -17,50 +14,57 @@ class AdminController extends Controller
 
     }
 
-    public function index($id) {
+    public function index($id)
+    {
 
         $item = Pengaduan::with([
-            'details', 'user'
+            'details', 'user',
         ])->findOrFail($id);
 
-        return view('pages.admin.pengaduan.detail',[
-        'item' => $item
+        return view('pages.admin.pengaduan.detail', [
+            'item' => $item,
         ]);
     }
 
-    public function masyarakat() {
+    public function masyarakat()
+    {
 
-        $data = DB::table('users')->where('roles','=', 'USER')->get();
+        $data = DB::table('users')->where('roles', '=', 'USER')->get();
 
         return view('pages.admin.masyarakat', [
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
-    public function laporan() {
+    public function laporan()
+    {
 
         $pengaduan = Pengaduan::all();
 
-        return view('pages.admin.laporan',[
-            'pengaduan' => $pengaduan
+        return view('pages.admin.laporan', [
+            'pengaduan' => $pengaduan,
         ]);
     }
 
-    public function cetak() {
+    public function cetak()
+    {
 
         $pengaduan = Pengaduan::all();
 
-        $pdf = PDF::loadview('pages.admin.pengaduan',[
-            'pengaduan' => $pengaduan
+        $pdf = PDF::loadview('pages.admin.pengaduan', [
+            'pengaduan' => $pengaduan,
         ]);
+
         return $pdf->download('laporan.pdf');
     }
 
-    public function pdf($id) {
+    public function pdf($id)
+    {
 
         $pengaduan = Pengaduan::find($id);
 
         $pdf = PDF::loadview('pages.admin.pengaduan.cetak', compact('pengaduan'))->setPaper('a4');
+
         return $pdf->download('laporan-pengaduan.pdf');
     }
 }

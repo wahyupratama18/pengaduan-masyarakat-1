@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreMasyarakatRequest;
+use App\Http\Requests\UpdateMasyarakatRequest;
 use App\Models\Pengaduan;
-use App\Models\Tanggapan;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 use RealRashid\SweetAlert\Facades\Alert;
-use File;
 
 class MasyarakatController extends Controller
 {
@@ -19,12 +18,9 @@ class MasyarakatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user()->nik;
-        // dd($user);
-
-        return view('pages.masyarakat.index', ['liat'=>$user]);
+        return view('pages.masyarakat.index', ['liat' => $request->user()->nik]);
     }
 
     /**
@@ -40,32 +36,21 @@ class MasyarakatController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMasyarakatRequest $request): RedirectResponse
     {
-        $request->validate([
-        'description' => 'required',
-        'image' => 'required|image|mimes:png,jpg,jpeg',
+        $request->user()->pengaduans()->create([
+            'name' => $request->user()->name,
+            'description' => $request->description,
+            'image' => $request->image ? $request->file('image')->store('assets/laporan') : null,
+            'user_nik' => $request->user()->nik,
         ]);
 
-        $nik = Auth::user()->nik;
-        $id = Auth::user()->id;
-        $name = Auth::user()->name;
-
-        $data = $request->all();
-        $data['user_nik']=$nik;
-        $data['user_id']=$id;
-        $data['name']=$name;
-        $data['image'] = $request->file('image')->store('assets/laporan', 'public');
-
-
-
         Alert::success('Berhasil', 'Pengaduan terkirim');
-        Pengaduan::create($data);
+
         return redirect('user/pengaduan');
-        
+
         // return view('pages.masyarakat.detail', compact('items'));
     }
 
@@ -75,33 +60,21 @@ class MasyarakatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
-    public function lihat() {
-
-
-        // $user = Auth::user()->pengaduan()->get();
-        $user = Auth::user()->nik;
-
-
-        $items = Pengaduan::all();
-
+    public function lihat(): View
+    {
         return view('pages.masyarakat.detail', [
-            'items' => $items
+            'items' => Pengaduan::query()->get(),
         ]);
 
     }
 
-    public function show($id)
+    public function show(Pengaduan $pengaduan): View
     {
-        $item = Pengaduan::with([
-        'details', 'user'
-        ])->findOrFail($id);
+        $pengaduan->load(['details', 'user', 'tanggapan']);
 
-        $tangap = Tanggapan::where('pengaduan_id',$id)->first();
-
-        return view('pages.masyarakat.show',[
-        'item' => $item,
-        'tangap' => $tangap
+        return view('pages.masyarakat.show', [
+            'item' => $pengaduan,
+            'tangap' => $pengaduan->tanggapan,
         ]);
     }
 
@@ -111,94 +84,34 @@ class MasyarakatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Pengaduan $pengaduan): View
     {
-        $item = Pengaduan::with([
-            'details', 'user'
-            ])->findOrFail($id);
-    
-            $tangap = Tanggapan::where('pengaduan_id',$id)->first();
-    
-            return view('pages.masyarakat.edit',[
-            'item' => $item,
-            'tangap' => $tangap
-            ]);
+        $pengaduan->load(['details', 'user', 'tanggapan']);
+
+        return view('pages.masyarakat.edit', [
+            'item' => $pengaduan,
+            'tangap' => $pengaduan->tan,
+        ]);
 
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateMasyarakatRequest $request, Pengaduan $pengaduan): RedirectResponse
     {
-        //  $this->validate($request, [
-        //     'description' => 'required',
-        //     'image'   => 'image|mimes:jpeg,jpg,png|max:2048',
-        // ]);
-    
-        // //get data Blog by ID
-        // $pengaduan = Pengaduan::findOrFail($id);
-    
-        // if($request->file('image') == "") {
-        //     $nik = Auth::user()->nik;
-        //     $id = Auth::user()->id;
-        //     $name = Auth::user()->name;
-        
-        //     $data = $request->all();
-        //     $data['user_nik']=$nik;
-        //     $data['user_id']=$id;
-        //     $data['name']=$name;
+        // do an update [validasi klik UpdateMasyarakatRequest]
+        $pengaduan->update([
+            'description' => $request->description,
+            'image' => $request->image ? $request->file('image')->store('assets/laporan') : null,
+        ]);
 
-        //     $Pengaduan->update($data);
-        //     // $data->update([
-        //     //     'description'    => $request->description,
-        //     // ]);
-    
-        // } else {
-    
-        //     //hapus old image
-        //     Storage::disk('local')->delete('assets/laporan', 'public'.$image->image);
-    
-        //     //upload new image
-        //     $image = $request->file('gambar');
-        //     $image->storeAs('assets/laporan', 'public', $image->hashName());
-    
-        //     $image->update([
-        //         'description' => $request->description,
-        //         'image'  => $image->hashName(),
-        //     ]);
-    
-        // }
-        //     return redirect()->route('user.pengaduan')->with(['success' => 'Data Berhasil Diupdate!']);
+        Alert::success('Berhasil', 'Pengaduan terkirim');
 
-
-        $request->validate([
-            'description' => 'required',
-            'image' => 'required|image|mimes:png,jpg,jpeg',
-            ]);
-    
-            $pengaduan = Pengaduan::findOrFail($id);
-            $nik = Auth::user()->nik;
-            $id = Auth::user()->id;
-            $name = Auth::user()->name;
-    
-            $data = $request->all();
-            $data['user_nik']=$nik;
-            $data['user_id']=$id;
-            $data['name']=$name;
-            $data['image'] = $request->file('image')->store('assets/laporan', 'public');
-    
-    
-    
-            Alert::success('Berhasil', 'Pengaduan terkirim');
-            Pengaduan::update($data);
-            // Pengaduan::update($data);
-            // Pengaduan::where('id', $id)->update($request->validated());
-            return redirect('user/pengaduan');
+        return redirect('user/pengaduan');
     }
 
     /**

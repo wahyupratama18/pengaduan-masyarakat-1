@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Pengaduan;
-use App\Models\Tanggapan;
+use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PengaduanController extends Controller
@@ -18,10 +17,10 @@ class PengaduanController extends Controller
     {
 
         $items = Pengaduan::all();
-        return view('pages.admin.pengaduan.index',[
-            'items' => $items
-        ]);
 
+        return view('pages.admin.pengaduan.index', [
+            'items' => $items,
+        ]);
 
     }
 
@@ -38,7 +37,6 @@ class PengaduanController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -52,17 +50,13 @@ class PengaduanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Pengaduan $pengaduan)
     {
-        $item = Pengaduan::with([
-            'details', 'user'
-        ])->findOrFail($id);
+        $pengaduan->load(['details', 'user', 'tanggapan']);
 
-        $tangap = Tanggapan::where('pengaduan_id',$id)->first();
-
-        return view('pages.admin.pengaduan.detail',[
-            'item' => $item,
-            'tangap' => $tangap
+        return view('pages.admin.pengaduan.detail', [
+            'item' => $pengaduan,
+            'tangap' => $pengaduan->tanggapan,
         ]);
     }
 
@@ -74,20 +68,17 @@ class PengaduanController extends Controller
      */
     public function edit($id)
     {
-       //
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Pengaduan $pengaduan)
     {
-
-
         // $status->update($data);
         return redirect('admin/pengaduans');
     }
@@ -104,6 +95,7 @@ class PengaduanController extends Controller
         $pengaduan->delete();
 
         Alert::success('Berhasil', 'Pengaduan telah di hapus');
+
         return redirect('admin/pengaduans');
     }
 }
